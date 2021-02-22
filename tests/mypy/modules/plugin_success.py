@@ -1,6 +1,17 @@
 from typing import ClassVar, Optional, Union
 
-from pydantic import BaseModel, Field, create_model
+from pydantic import (
+    BaseModel,
+    Field,
+    PositiveFloat,
+    PositiveInt,
+    StrictBool,
+    StrictBytes,
+    StrictFloat,
+    StrictInt,
+    StrictStr,
+    create_model,
+)
 from pydantic.dataclasses import dataclass
 
 
@@ -139,3 +150,25 @@ DynamicModel = create_model('DynamicModel', __base__=Model)
 
 dynamic_model = DynamicModel(x=1, y='y')
 dynamic_model.x = 2
+
+
+class StrictModel(BaseModel):
+    a: StrictStr
+    b: StrictBool
+    c: StrictInt
+    d: StrictBytes
+    e: StrictFloat
+    f: PositiveInt
+    g: PositiveFloat
+
+
+# Base types are accepted for strict fields.
+StrictModel(
+    a='',
+    b=False,
+    c=0,
+    d=b'',
+    e=0.0,
+    f=1,
+    g=1.0,
+)

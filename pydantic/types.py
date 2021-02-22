@@ -155,8 +155,12 @@ class ConstrainedBytes(bytes):
         yield constr_length_validator
 
 
-class StrictBytes(ConstrainedBytes):
-    strict = True
+if TYPE_CHECKING:
+    StrictBytes = bytes
+else:
+
+    class StrictBytes(ConstrainedBytes):
+        strict = True
 
 
 def conbytes(
@@ -309,8 +313,12 @@ def constr(
     return _registered(type('ConstrainedStrValue', (ConstrainedStr,), namespace))
 
 
-class StrictStr(ConstrainedStr):
-    strict = True
+if TYPE_CHECKING:
+    StrictStr = str
+else:
+
+    class StrictStr(ConstrainedStr):
+        strict = True
 
 
 if TYPE_CHECKING:
@@ -416,24 +424,28 @@ def conint(
     return type('ConstrainedIntValue', (ConstrainedInt,), namespace)
 
 
-class PositiveInt(ConstrainedInt):
-    gt = 0
+if TYPE_CHECKING:
+    PositiveInt = int
+    NegativeInt = int
+    NonPositiveInt = int
+    NonNegativeInt = int
+    StrictInt = int
+else:
 
+    class PositiveInt(ConstrainedInt):
+        gt = 0
 
-class NegativeInt(ConstrainedInt):
-    lt = 0
+    class NegativeInt(ConstrainedInt):
+        lt = 0
 
+    class NonPositiveInt(ConstrainedInt):
+        le = 0
 
-class NonPositiveInt(ConstrainedInt):
-    le = 0
+    class NonNegativeInt(ConstrainedInt):
+        ge = 0
 
-
-class NonNegativeInt(ConstrainedInt):
-    ge = 0
-
-
-class StrictInt(ConstrainedInt):
-    strict = True
+    class StrictInt(ConstrainedInt):
+        strict = True
 
 
 class ConstrainedFloat(float, metaclass=ConstrainedNumberMeta):
@@ -485,24 +497,28 @@ def confloat(
     return type('ConstrainedFloatValue', (ConstrainedFloat,), namespace)
 
 
-class PositiveFloat(ConstrainedFloat):
-    gt = 0
+if TYPE_CHECKING:
+    PositiveFloat = float
+    NegativeFloat = float
+    NonPositiveFloat = float
+    NonNegativeFloat = float
+    StrictFloat = float
+else:
 
+    class PositiveFloat(ConstrainedFloat):
+        gt = 0
 
-class NegativeFloat(ConstrainedFloat):
-    lt = 0
+    class NegativeFloat(ConstrainedFloat):
+        lt = 0
 
+    class NonPositiveFloat(ConstrainedFloat):
+        le = 0
 
-class NonPositiveFloat(ConstrainedFloat):
-    le = 0
+    class NonNegativeFloat(ConstrainedFloat):
+        ge = 0
 
-
-class NonNegativeFloat(ConstrainedFloat):
-    ge = 0
-
-
-class StrictFloat(ConstrainedFloat):
-    strict = True
+    class StrictFloat(ConstrainedFloat):
+        strict = True
 
 
 class ConstrainedDecimal(Decimal, metaclass=ConstrainedNumberMeta):
